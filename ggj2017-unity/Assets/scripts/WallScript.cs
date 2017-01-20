@@ -29,7 +29,7 @@ public class WallScript : MonoBehaviour {
 
     private void UpdatePosition()
     {
-        body.MovePosition(new Vector2(body.position.x, GetLevelByIndex(heroLevelIndex)));
+		transform.position = new Vector3(transform.position.x, GetLevelByIndex(heroLevelIndex), transform.position.z);
     }
 
     private float NextAmplitude()
@@ -70,11 +70,11 @@ public class WallScript : MonoBehaviour {
         levelsList.Dequeue();
     }
 
-    private float GetLevelByIndex(int i)
+    private float GetLevelByIndex(int index)
     {
         var enumerator = levelsList.GetEnumerator();
         var i = 0;
-        while (i++ < i) enumerator.MoveNext();
+        while (i++ < index) enumerator.MoveNext();
         return enumerator.Current;
     }
 }
