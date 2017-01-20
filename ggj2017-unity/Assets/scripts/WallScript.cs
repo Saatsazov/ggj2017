@@ -43,10 +43,10 @@ public class WallScript : MonoBehaviour {
 //		pos.y = Mathf.Sin (x);
 //		body.position = pos;
 
-		body.MovePosition(new Vector2(body.position.x, y));
+//		body.MovePosition(new Vector2(body.position.x, y));
 
-//		var pos = transform.position;
-//		pos.y = Mathf.Sin (x);
-//		transform.position = pos;
+		var pos = transform.position;
+		pos.y = y;
+		transform.position = pos;
 	}
 }

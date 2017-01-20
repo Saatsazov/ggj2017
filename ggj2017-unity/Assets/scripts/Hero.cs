@@ -8,6 +8,7 @@ public class Hero : MonoBehaviour {
 	public BoxCollider2D bottomCollider;
 	public Rigidbody2D rigitBody;
 	public Rigidbody2D boat;
+	public Rigidbody2D wall;
 
 	bool isGrounded;
 	public bool isBoatGrounded;
@@ -18,6 +19,8 @@ public class Hero : MonoBehaviour {
 
 	bool bentingDown;
 
+	public float jumpVelocity;
+	public float jumpWithBoatVelocity;
 
 	// Use this for initialization
 	void Start () {
@@ -48,10 +51,23 @@ public class Hero : MonoBehaviour {
 		}
 	}
 
+	void FixedUpdate()
+	{
+		
+	}
+
 	void OnCollisionEnter2D(Collision2D collision)
 	{
 		if (collision.gameObject.name == "boat") {
 			isGrounded = true;
+		}
+
+	}
+
+	void OnTriggerEnter2D(Collider2D collider)
+	{
+		if (collider.gameObject.tag == "dieElements") {
+			gameOver ();
 		}
 	}
 
@@ -82,8 +98,9 @@ public class Hero : MonoBehaviour {
 		if (!isGrounded || !isBoatGrounded) {
 			return;
 		}
-		Vector2 force = new Vector2 (0, 200);
-		rigitBody.AddForce (force);
+		Vector2 velocity = new Vector2 (0, jumpVelocity);
+		rigitBody.velocity = velocity;
+
 	}
 
 	void doubleJump()
@@ -92,9 +109,15 @@ public class Hero : MonoBehaviour {
 		if (!isGrounded || !isBoatGrounded) {
 			return;
 		}
-		Vector2 force = new Vector2 (0, 200);
-		rigitBody.AddForce (force);
-		boat.AddForce (force);
+
+		Vector2 force = new Vector2 (0, jumpWithBoatVelocity);
+		rigitBody.velocity = force;
+		boat.velocity = force;
 		
+	}
+
+	public void gameOver()
+	{
+		print ("gameOver");
 	}
 }
