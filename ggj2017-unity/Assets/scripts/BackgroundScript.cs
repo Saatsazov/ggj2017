@@ -11,10 +11,10 @@ public class BackgroundScript : MonoBehaviour {
 	void Update () {
 		var pos = transform.position;
 
-		pos.x += speed;
+		pos.x -= speed;
 
-		if (pos.x > maxX) {
-			pos.x -= maxX;
+		if (pos.x < -maxX) {
+			pos.x += maxX;
 		}
 
 		transform.position = pos;

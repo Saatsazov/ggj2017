@@ -22,9 +22,13 @@ public class Hero : MonoBehaviour {
 	public float jumpVelocity;
 	public float jumpWithBoatVelocity;
 
+
+	Animator animator;
+
 	// Use this for initialization
 	void Start () {
-		
+
+		animator = GetComponent<Animator> ();
 	}
 	
 	// Update is called once per frame
@@ -34,12 +38,15 @@ public class Hero : MonoBehaviour {
 		}
 
 		if (Input.GetKeyUp (KeyCode.Space)) {
+			
 			CancelInvoke ("bentDown");
 			if (bentingDown) {
 				bentingDown = false;
 				bentUp ();
 			}
 			else {
+
+				animator.SetTrigger ("jump");
 				if (doubleJumpReady) {
 					CancelInvoke ("jump");
 					doubleJump ();
@@ -80,6 +87,8 @@ public class Hero : MonoBehaviour {
 
 	void bentDown()
 	{
+
+		animator.SetBool ("isBend", true);
 		bentingDown = true;
 		upperCollider.enabled = false;
 		print ("bentDown");
@@ -87,6 +96,8 @@ public class Hero : MonoBehaviour {
 
 	void bentUp()
 	{
+
+		animator.SetBool ("isBend", false);
 		print ("bentUp");
 		upperCollider.enabled = true;
 
@@ -98,8 +109,11 @@ public class Hero : MonoBehaviour {
 		if (!isGrounded || !isBoatGrounded) {
 			return;
 		}
-		Vector2 velocity = new Vector2 (0, jumpVelocity);
-		rigitBody.velocity = velocity;
+//		Vector2 velocity = new Vector2 (0, jumpVelocity);
+//		rigitBody.velocity = velocity;
+		Vector2 force = new Vector2(0, jumpVelocity);
+		rigitBody.AddForce (force);
+
 
 	}
 
