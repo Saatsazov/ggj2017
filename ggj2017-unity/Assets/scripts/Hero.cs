@@ -84,8 +84,7 @@ public class Hero : MonoBehaviour {
 		if (collision.gameObject.name == "boat") {
 			isGrounded = true;
 		}
-        if ((collision.gameObject.name == "FlyingCup(Clone)" ||
-            collision.gameObject.name == "FlyingBra(Clone)") &&
+        if (collision.gameObject.tag == "dieElements" &&
             collision.gameObject.tag != "Finish")
         {
             collision.gameObject.tag = "Finish";

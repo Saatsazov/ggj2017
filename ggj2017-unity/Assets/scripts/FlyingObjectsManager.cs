@@ -7,20 +7,26 @@ public sealed class FlyingObjectsTypes
 {
     private readonly String name;
     private readonly int value;
+    public readonly int lifeDelta;
+    public readonly float frequency;
+    public readonly bool hasOwnVelocity;
 
     private static readonly Dictionary<int, FlyingObjectsTypes> instance = new Dictionary<int, FlyingObjectsTypes>();
     public static int Length = instance.Count;
     public static IEnumerable<FlyingObjectsTypes> Values = instance.Values;
 
-    public static readonly FlyingObjectsTypes CUP = new FlyingObjectsTypes(0, "FlyingCup");
-	public static readonly FlyingObjectsTypes BRA = new FlyingObjectsTypes(1, "FlyingBra");
-	public static readonly FlyingObjectsTypes DRAGON = new FlyingObjectsTypes(2, "Dragon");
-    public static readonly FlyingObjectsTypes KNIFE = new FlyingObjectsTypes(3, "Knife");
+    public static readonly FlyingObjectsTypes CUP = new FlyingObjectsTypes(0, "FlyingCup", -1, 2, false);
+	public static readonly FlyingObjectsTypes BRA = new FlyingObjectsTypes(1, "FlyingBra", -1, 3, false);
+	public static readonly FlyingObjectsTypes DRAGON = new FlyingObjectsTypes(2, "Dragon", -1, 5, true);
+    public static readonly FlyingObjectsTypes KNIFE = new FlyingObjectsTypes(3, "Knife", -1, 5, true);
 
-    private FlyingObjectsTypes(int value, String name)
+    private FlyingObjectsTypes(int value, String name, int lifeDelta, float frequency, bool hasOwnVelocity)
     {
         this.name = name;
         this.value = value;
+        this.lifeDelta = lifeDelta;
+        this.frequency = frequency;
+        this.hasOwnVelocity = hasOwnVelocity;
         instance[value] = this;
         Length = instance.Count;
         Values = instance.Values;
@@ -47,11 +53,15 @@ public class FlyingObjectsManager : MonoBehaviour {
     Dictionary<FlyingObjectsTypes, GameObject> flyingObjectsTemplates;
     Rigidbody2D body;
     System.Random randomizer = new System.Random();
-    private float nextFlyDelay = 3.0f;
-    private float prevFlyDelay = 3.0f;
+    private float nextFlyDelay = 5.0f;
+    private float delaySpeed = 2.0f;
+    private float delaySpeedStep = 0.01f;
+
+    private FlyingObjectsTypes nextRandomObject;
 
     void Start()
     {
+        nextRandomObject = (FlyingObjectsTypes)(randomizer.Next() % FlyingObjectsTypes.Length);
         flyingObjectsTemplates = new Dictionary<FlyingObjectsTypes, GameObject>();
         foreach (FlyingObjectsTypes type in FlyingObjectsTypes.Values)
         {
@@ -66,9 +76,10 @@ public class FlyingObjectsManager : MonoBehaviour {
         nextFlyDelay -= Time.deltaTime;
         if (nextFlyDelay <= 0f)
         {
-            prevFlyDelay -= 0.05f;
-            nextFlyDelay = Mathf.Max(prevFlyDelay, 1.0f);
+            print("Update");
 			CreateRandomFlyingObject();
+            nextFlyDelay = delaySpeed * nextRandomObject.frequency;
+            delaySpeed  = delaySpeed > 0.8 ? delaySpeed -= delaySpeedStep : delaySpeed;
         }
     }
 
@@ -77,33 +88,27 @@ public class FlyingObjectsManager : MonoBehaviour {
         var randomStartXPosition = randomizer.Next(400, 600) / 100.0f;
         var randomTargetXPosition = (randomizer.Next(0, 400) - 200) / 100.0f;
         var randomTargetYPosition = randomizer.Next(700, 1000) / 100.0f;
-        var randomObject = (FlyingObjectsTypes)(randomizer.Next() % FlyingObjectsTypes.Length);
 
-		if (randomObject == FlyingObjectsTypes.DRAGON) {
-			addDragon ();
-			nextFlyDelay = 10;
-			return;
-		}
+        GameObject flyingObject = Instantiate(flyingObjectsTemplates[nextRandomObject]);
 
-		if (randomObject == FlyingObjectsTypes.KNIFE) {
-			addKnife ();
-			nextFlyDelay = 10;
-			return;
-		}
-        GameObject flyingObject = Instantiate(
-            flyingObjectsTemplates[randomObject],
-            new Vector3(randomStartXPosition, -3.0f),
-            new Quaternion());
-        var flyingObjectRigidbody = flyingObject.GetComponent<Rigidbody2D>();
-        flyingObjectRigidbody.velocity = GetBallisticVelocity(
-            flyingObject,
-            new Vector3(randomTargetXPosition, randomTargetYPosition));
-        Destroy(flyingObject, 2);
+        if(!nextRandomObject.hasOwnVelocity)
+        {
+            flyingObject.transform.position = new Vector3(randomStartXPosition, -3.0f);
+            var flyingObjectRigidbody = flyingObject.GetComponent<Rigidbody2D>();
+
+            flyingObjectRigidbody.velocity = GetBallisticVelocity(
+                new Vector3(flyingObject.transform.position.x, flyingObject.transform.position.y),
+                new Vector3(randomTargetXPosition, randomTargetYPosition));
+        }
+
+        Destroy(flyingObject, 6);
+
+        nextRandomObject = (FlyingObjectsTypes)(randomizer.Next() % FlyingObjectsTypes.Length);
     }
 
-    private Vector3 GetBallisticVelocity(GameObject flyingObject, Vector3 targetPosition)
+    private Vector3 GetBallisticVelocity(Vector3 flyingObjectPosition, Vector3 targetPosition)
     {
-        var direction = targetPosition - flyingObject.transform.position;
+        var direction = targetPosition - flyingObjectPosition;
         var heightDifference = direction.y;
         direction.y = 0;
         var distance = direction.magnitude; 
@@ -112,20 +117,4 @@ public class FlyingObjectsManager : MonoBehaviour {
         var vel = Mathf.Sqrt(distance * Physics.gravity.magnitude);
         return vel * direction.normalized;
     }
-
-	void addKnife()
-	{
-		GameObject instance = Instantiate(Resources.Load("objects/knife", typeof(GameObject))) as GameObject;
-		var pos = instance.transform.position;
-		pos.x = 9;
-		instance.transform.position = pos;
-	}
-
-	void addDragon()
-	{
-		GameObject instance = Instantiate(Resources.Load("objects/dragon", typeof(GameObject))) as GameObject;
-		var pos = instance.transform.position;
-		pos.x = 9;
-		instance.transform.position = pos;
-	}
 }

@@ -21,7 +21,8 @@ public class DragonScript : MonoBehaviour {
 		mainCamera = GameObject.Find ("Main Camera");
 
 		sprite = GetComponent<SpriteRenderer> ();
-	}
+        transform.position = new Vector3(9, 2.0f);
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -31,7 +32,7 @@ public class DragonScript : MonoBehaviour {
 		transform.position = pos;
 
 		if (!sprite.isVisible && Time.timeSinceLevelLoad - startTime > minLiveTime) {
-			Destroy (gameObject);
+			//Destroy (gameObject);
 		}
 	}
 }

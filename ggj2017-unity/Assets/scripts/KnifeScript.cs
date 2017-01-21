@@ -25,21 +25,17 @@ public class KnifeScript : MonoBehaviour {
 		startTime = Time.timeSinceLevelLoad;
 		sprite = GetComponent<SpriteRenderer> ();
 		speed = Random.Range (speedMin, speedMax);
-
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
-		var pos = transform.position;
-		pos.x -= speed;
-		pos.y = mainCamera.transform.position.y + offsetX;
-		transform.position = pos;
+        transform.position = new Vector3(9, -2.0f);
 	}
 
 	void Update()
 	{
-		if (!sprite.isVisible && Time.timeSinceLevelLoad - startTime > minLiveTime) {
-			Destroy (gameObject);
+        var pos = transform.position;
+        pos.x -= speed;
+        pos.y = mainCamera.transform.position.y + offsetX;
+        transform.position = pos;
+        if (!sprite.isVisible && Time.timeSinceLevelLoad - startTime > minLiveTime) {
+			//Destroy (gameObject);
 		}
 	}
 }
