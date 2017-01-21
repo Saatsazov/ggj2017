@@ -23,7 +23,8 @@ public class Hero : MonoBehaviour {
 	public float jumpVelocity;
 	public float jumpWithBoatVelocity;
 
-    public int lives = 3;
+    public int maxLives = 3;
+    private int lives = 0;
     private List<GameObject> hearts = new List<GameObject>();
 
 	AudioSource jumpAudio;
@@ -41,12 +42,8 @@ public class Hero : MonoBehaviour {
 		jumpWithBoatAudio = GameObject.Find ("jumpWithBoat2").GetComponent<AudioSource> ();
 
         heartTemplate = GameObject.Find("Heart");
-        for (var i = 0; i < lives; ++i)
-        {
-            var heart = Instantiate(heartTemplate);
-            heart.transform.position = new Vector3(5.0f - 0.7f * (lives - i), 4.0f);
-            hearts.Add(heart);
-        }
+        int i = 0;
+        while (i++ < maxLives) AddLife();
 	}
 	
 	// Update is called once per frame
@@ -92,15 +89,31 @@ public class Hero : MonoBehaviour {
             collision.gameObject.tag != "Finish")
         {
             collision.gameObject.tag = "Finish";
-            lives--;
-            Destroy(hearts[lives]);
-            hearts.RemoveAt(lives);
-            if (lives <= 0)
-            {
-                gameOver();
-            } 
+            RemoveLife();
         }
 	}
+
+    public void AddLife()
+    {
+        if (lives < maxLives)
+        {
+            lives++;
+            var heart = Instantiate(heartTemplate);
+            heart.transform.position = new Vector3(5.0f - 0.7f * (maxLives - lives), 4.0f);
+            hearts.Add(heart);
+        }
+    }
+
+    public void RemoveLife()
+    {
+        lives--;
+        Destroy(hearts[lives]);
+        hearts.RemoveAt(lives);
+        if (lives <= 0)
+        {
+            gameOver();
+        }
+    }
 
 	void OnTriggerEnter2D(Collider2D collider)
 	{
