@@ -26,8 +26,9 @@ public class Hero : MonoBehaviour {
     public int maxLives = 3;
     private int lives = 0;
     private List<GameObject> hearts = new List<GameObject>();
+    private Dictionary<string, AudioSource> hitMap= new Dictionary<string, AudioSource>();
 
-	AudioSource jumpAudio;
+    AudioSource jumpAudio;
 	AudioSource jumpWithBoatAudio;
 
 
@@ -44,7 +45,12 @@ public class Hero : MonoBehaviour {
         heartTemplate = GameObject.Find("Heart");
         int i = 0;
         while (i++ < maxLives) AddLife();
-	}
+
+        hitMap.Add("Dragon", GameObject.Find("dragonhit").GetComponent<AudioSource>());
+        hitMap.Add("FlyingCup", GameObject.Find("cuphit").GetComponent<AudioSource>());
+        hitMap.Add("FlyingBra", GameObject.Find("brahit").GetComponent<AudioSource>());
+        hitMap.Add("Last", GameObject.Find("lasthit").GetComponent<AudioSource>());
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -84,18 +90,21 @@ public class Hero : MonoBehaviour {
 		if (collision.gameObject.name == "boat") {
 			isGrounded = true;
 		}
+        
         if (collision.gameObject.tag == "dieElements" &&
             collision.gameObject.tag != "Finish")
         {
 			animator.SetTrigger ("bang");
             collision.gameObject.tag = "Finish";
-            RemoveLife();
+            RemoveLife(collision.gameObject.name);
         }
-		if (collision.gameObject.tag == "dieElements") {
-			animator.SetTrigger ("bang");
-			RemoveLife();
-		}
-	}
+        if (collision.gameObject.tag == "dieElements")
+        {
+            animator.SetTrigger("bang");
+            RemoveLife(collision.gameObject.name);
+        }
+
+    }
 
     public void AddLife()
     {
@@ -108,21 +117,29 @@ public class Hero : MonoBehaviour {
         }
     }
 
-    public void RemoveLife()
+    public IEnumerator RemoveLife(string who)
     {
         lives--;
         Destroy(hearts[lives]);
         hearts.RemoveAt(lives);
         if (lives <= 0)
         {
+            hitMap["Last"].Play();
+            yield return new WaitForSeconds(5.0f);
             gameOver();
+        } else
+        {
+            if (hitMap[who] != null)
+            {
+                hitMap[who].Play();
+            }
         }
     }
 
 	void OnTriggerEnter2D(Collider2D collider)
 	{
 		if (collider.gameObject.tag == "dieElements") {
-			// gameOver ();
+			//gameOver ();
 		}
 	}
 

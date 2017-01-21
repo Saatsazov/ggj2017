@@ -10,23 +10,27 @@ public sealed class FlyingObjectsTypes
     public readonly int lifeDelta;
     public readonly float frequency;
     public readonly bool hasOwnVelocity;
+    public readonly string objectSoundName;
 
     private static readonly Dictionary<int, FlyingObjectsTypes> instance = new Dictionary<int, FlyingObjectsTypes>();
     public static int Length = instance.Count;
     public static IEnumerable<FlyingObjectsTypes> Values = instance.Values;
 
-    public static readonly FlyingObjectsTypes CUP = new FlyingObjectsTypes(0, "FlyingCup", -1, 2, false);
-	public static readonly FlyingObjectsTypes BRA = new FlyingObjectsTypes(1, "FlyingBra", -1, 3, false);
-	public static readonly FlyingObjectsTypes DRAGON = new FlyingObjectsTypes(2, "Dragon", -1, 5, true);
-    public static readonly FlyingObjectsTypes KNIFE = new FlyingObjectsTypes(3, "Knife", -1, 5, true);
+    public static readonly FlyingObjectsTypes CUP = new FlyingObjectsTypes(0, "FlyingCup", -1, 2, false, "cupfly");
+	public static readonly FlyingObjectsTypes BRA = new FlyingObjectsTypes(1, "FlyingBra", -1, 3, false, "chainbrafly");
+	public static readonly FlyingObjectsTypes DRAGON = new FlyingObjectsTypes(2, "Dragon", -1, 5, true, "droginfly");
+    public static readonly FlyingObjectsTypes KNIFE = new FlyingObjectsTypes(3, "Knife", -1, 5, true, "cupfly");
 
-    private FlyingObjectsTypes(int value, String name, int lifeDelta, float frequency, bool hasOwnVelocity)
+    private FlyingObjectsTypes(int value, String name,
+        int lifeDelta, float frequency, bool hasOwnVelocity,
+        string objectSoundName)
     {
         this.name = name;
         this.value = value;
         this.lifeDelta = lifeDelta;
         this.frequency = frequency;
         this.hasOwnVelocity = hasOwnVelocity;
+        this.objectSoundName = objectSoundName;
         instance[value] = this;
         Length = instance.Count;
         Values = instance.Values;
@@ -51,6 +55,7 @@ public sealed class FlyingObjectsTypes
 public class FlyingObjectsManager : MonoBehaviour {
 
     Dictionary<FlyingObjectsTypes, GameObject> flyingObjectsTemplates;
+    Dictionary<FlyingObjectsTypes, AudioSource> flyingObjectsAudio;
     Rigidbody2D body;
     System.Random randomizer = new System.Random();
     private float nextFlyDelay = 5.0f;
@@ -58,14 +63,19 @@ public class FlyingObjectsManager : MonoBehaviour {
     private float delaySpeedStep = 0.01f;
 
     private FlyingObjectsTypes nextRandomObject;
+    private AudioSource objectSound;
 
     void Start()
     {
         nextRandomObject = (FlyingObjectsTypes)(randomizer.Next() % FlyingObjectsTypes.Length);
+
         flyingObjectsTemplates = new Dictionary<FlyingObjectsTypes, GameObject>();
+        flyingObjectsAudio = new Dictionary<FlyingObjectsTypes, AudioSource>();
+
         foreach (FlyingObjectsTypes type in FlyingObjectsTypes.Values)
         {
             flyingObjectsTemplates.Add(type, GameObject.Find(type.ToString()));
+            flyingObjectsAudio.Add(type, GameObject.Find(type.objectSoundName).GetComponent<AudioSource>());
         }
         body = GetComponent<Rigidbody2D>();
         body.angularVelocity = 120.0f;
@@ -99,7 +109,11 @@ public class FlyingObjectsManager : MonoBehaviour {
             flyingObjectRigidbody.velocity = GetBallisticVelocity(
                 new Vector3(flyingObject.transform.position.x, flyingObject.transform.position.y),
                 new Vector3(randomTargetXPosition, randomTargetYPosition));
+
+            
         }
+
+        flyingObjectsAudio[nextRandomObject].Play();
 
         Destroy(flyingObject, 6);
 
