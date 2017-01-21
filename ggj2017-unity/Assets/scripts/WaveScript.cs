@@ -15,7 +15,7 @@ public class WaveScript : MonoBehaviour {
 	public GameObject wall;
 
     void Start () {
-        handTemplate = GameObject.Find ("hand");
+        handTemplate = GameObject.Find("hand");
 		GenerateHands ();
 		addEmptyWave ();
 	}
@@ -32,10 +32,6 @@ public class WaveScript : MonoBehaviour {
 			var pos = hand.transform.position;
 			var newPosY = waveGenarator.getWorldHightByX (pos.x);
 
-
-//			pos.y -= -cameraPos.y - waveCameraOffset;
-//			pos.y += (newPosY - pos.y) /2;
-//			pos.y +=  - cameraPos.y - waveCameraOffset;
 			pos.y = newPosY - cameraPos.y - waveCameraOffset;
 
 			pos.x -= xSpeed;
@@ -45,7 +41,6 @@ public class WaveScript : MonoBehaviour {
 			hand.transform.position = pos;
 
 			if (emptyWave != null) {
-//				print (1);
 				var w = 2.0f;
 				if ((pos.x < emptyWave.transform.position.x + w) &&
 				    (pos.x > emptyWave.transform.position.x - w)) {
@@ -61,8 +56,7 @@ public class WaveScript : MonoBehaviour {
 
 	public void addEmptyWave()
 	{
-		emptyWave = GameObject.Find ("EmptyWave");
-
+		emptyWave = GameObject.Find("EmptyWave");
 	}
 
 	void GenerateHands()

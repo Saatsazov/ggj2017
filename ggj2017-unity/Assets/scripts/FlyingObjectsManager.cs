@@ -66,7 +66,7 @@ public class FlyingObjectsManager : MonoBehaviour {
         {
             CreateRandomFlyingObject();
             prevFlyDelay -= 0.05f;
-            nextFlyDelay = Mathf.Max(prevFlyDelay, 1.5f);
+            nextFlyDelay = Mathf.Max(prevFlyDelay, 1.0f);
         }
     }
 
