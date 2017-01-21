@@ -45,8 +45,9 @@ public class Hero : MonoBehaviour {
 				bentUp ();
 			}
 			else {
-
-				animator.SetTrigger ("jump");
+				if (isGrounded && isBoatGrounded) {
+					animator.SetTrigger ("jump");
+				}
 				if (doubleJumpReady) {
 					CancelInvoke ("jump");
 					doubleJump ();
