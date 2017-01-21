@@ -8,26 +8,31 @@ public class KnifeScript : MonoBehaviour {
 	public float speedMax = 0.05f;
 
 	public float minLiveTime = 3;
-	public float offsetX = 2;
+	public float offsetX = 5;
 	float startTime;
 
-	public WaveGenerator waveGenerator;
+	WaveGenerator waveGenerator;
 
 	SpriteRenderer sprite;
+	GameObject mainCamera;
 
 	float speed;
 	// Use this for initialization
 	void Start () {
+		mainCamera = GameObject.Find ("Main Camera");
+		waveGenerator = mainCamera.GetComponent<WaveGenerator> ();
+
 		startTime = Time.timeSinceLevelLoad;
 		sprite = GetComponent<SpriteRenderer> ();
 		speed = Random.Range (speedMin, speedMax);
+
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
 		var pos = transform.position;
 		pos.x -= speed;
-		pos.y = waveGenerator.getWorldHightByX (pos.x) + offsetX;
+		pos.y = mainCamera.transform.position.y + offsetX;
 		transform.position = pos;
 	}
 

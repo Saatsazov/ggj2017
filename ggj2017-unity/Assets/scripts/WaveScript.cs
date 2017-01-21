@@ -24,7 +24,7 @@ public class WaveScript : MonoBehaviour {
 	void Update () {
 
 		var cameraPos = transform.position;
-		cameraPos.y = waveGenarator.getWorldHightByX(wall.transform.position.x);
+		cameraPos.y = - waveGenarator.getWorldHightByX(wall.transform.position.x);
 		transform.position = cameraPos;
 
 		for (int i = 0; i < handsCount; i++) {
@@ -32,7 +32,7 @@ public class WaveScript : MonoBehaviour {
 			var pos = hand.transform.position;
 			var newPosY = waveGenarator.getWorldHightByX (pos.x);
 
-			pos.y = newPosY - cameraPos.y - waveCameraOffset;
+			pos.y = newPosY + cameraPos.y - waveCameraOffset;
 
 			pos.x -= xSpeed;
 			if (pos.x < -10) {

@@ -5,20 +5,33 @@ using UnityEngine;
 public class DragonScript : MonoBehaviour {
 
 	public float speed = 0.01f;
-	public WaveGenerator waveGenerator;
+	WaveGenerator waveGenerator;
 
-	GameObject camera;
+	public float minLiveTime = 3;
+
+	SpriteRenderer sprite;
+
+	float startTime;
+	GameObject mainCamera;
 
 	// Use this for initialization
 	void Start () {
-		camera = GameObject.Find ("Main Camera");
+
+		startTime = Time.timeSinceLevelLoad;
+		mainCamera = GameObject.Find ("Main Camera");
+
+		sprite = GetComponent<SpriteRenderer> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		var pos = transform.position;
 		pos.x -= speed;
-		pos.y -= waveGenerator.getWorldHightByX (camera.transform.position.x) * 0.03f;
+		pos.y = mainCamera.transform.position.y;
 		transform.position = pos;
+
+		if (!sprite.isVisible && Time.timeSinceLevelLoad - startTime > minLiveTime) {
+			Destroy (gameObject);
+		}
 	}
 }

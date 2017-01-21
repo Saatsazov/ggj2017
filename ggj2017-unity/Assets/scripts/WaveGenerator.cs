@@ -34,7 +34,9 @@ public class WaveGenerator : MonoBehaviour {
 
     private void UpdatePosition()
     {
-		transform.position = new Vector3(transform.position.x, getWorldHightByX(transform.position.x), transform.position.z);
+		//var y = getWorldHightByX (transform.position.x);
+		//print("camera y: " + y);
+		//transform.position = new Vector3(transform.position.x, y, transform.position.z);
     }
 
     private float NextAmplitude()
@@ -97,7 +99,7 @@ public class WaveGenerator : MonoBehaviour {
 		float sceneWidth = 18.0f;
 		int index = (int)((x + sceneWidth/2)  * ((float)numberOfLevels/sceneWidth));
 		index = Mathf.Max (0, index);
-		index = Mathf.Min (numberOfLevels-1, index);
+		index = Mathf.Min (numberOfLevels-2, index);
 		return GetLevelByIndex (index);
 	}
 }

@@ -13,7 +13,9 @@ public sealed class FlyingObjectsTypes
     public static IEnumerable<FlyingObjectsTypes> Values = instance.Values;
 
     public static readonly FlyingObjectsTypes CUP = new FlyingObjectsTypes(0, "FlyingCup");
-    public static readonly FlyingObjectsTypes BRA = new FlyingObjectsTypes(1, "FlyingBra");
+	public static readonly FlyingObjectsTypes BRA = new FlyingObjectsTypes(1, "FlyingBra");
+	public static readonly FlyingObjectsTypes DRAGON = new FlyingObjectsTypes(2, "Dragon");
+    public static readonly FlyingObjectsTypes KNIFE = new FlyingObjectsTypes(3, "Knife");
 
     private FlyingObjectsTypes(int value, String name)
     {
@@ -57,6 +59,7 @@ public class FlyingObjectsManager : MonoBehaviour {
         }
         body = GetComponent<Rigidbody2D>();
         body.angularVelocity = 120.0f;
+		addKnife ();
     }
 
     void Update()
@@ -64,9 +67,9 @@ public class FlyingObjectsManager : MonoBehaviour {
         nextFlyDelay -= Time.deltaTime;
         if (nextFlyDelay <= 0f)
         {
-            CreateRandomFlyingObject();
             prevFlyDelay -= 0.05f;
             nextFlyDelay = Mathf.Max(prevFlyDelay, 1.0f);
+			CreateRandomFlyingObject();
         }
     }
 
@@ -76,6 +79,18 @@ public class FlyingObjectsManager : MonoBehaviour {
         var randomTargetXPosition = (randomizer.Next(0, 400) - 200) / 100.0f;
         var randomTargetYPosition = randomizer.Next(700, 1000) / 100.0f;
         var randomObject = (FlyingObjectsTypes)(randomizer.Next() % FlyingObjectsTypes.Length);
+
+		if (randomObject == FlyingObjectsTypes.DRAGON) {
+			addDragon ();
+			nextFlyDelay = 10;
+			return;
+		}
+
+		if (randomObject == FlyingObjectsTypes.KNIFE) {
+			addKnife ();
+			nextFlyDelay = 10;
+			return;
+		}
         GameObject flyingObject = Instantiate(
             flyingObjectsTemplates[randomObject],
             new Vector3(randomStartXPosition, -3.0f),
@@ -98,4 +113,20 @@ public class FlyingObjectsManager : MonoBehaviour {
         var vel = Mathf.Sqrt(distance * Physics.gravity.magnitude);
         return vel * direction.normalized;
     }
+
+	void addKnife()
+	{
+		GameObject instance = Instantiate(Resources.Load("objects/knife", typeof(GameObject))) as GameObject;
+		var pos = instance.transform.position;
+		pos.x = 9;
+		instance.transform.position = pos;
+	}
+
+	void addDragon()
+	{
+		GameObject instance = Instantiate(Resources.Load("objects/dragon", typeof(GameObject))) as GameObject;
+		var pos = instance.transform.position;
+		pos.x = 9;
+		instance.transform.position = pos;
+	}
 }
