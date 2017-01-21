@@ -99,7 +99,7 @@ public class WaveGenerator : MonoBehaviour {
 		float sceneWidth = 18.0f;
 		int index = (int)((x + sceneWidth/2)  * ((float)numberOfLevels/sceneWidth));
 		index = Mathf.Max (0, index);
-		index = Mathf.Min (numberOfLevels-1, index);
+		index = Mathf.Min (numberOfLevels-2, index);
 		return GetLevelByIndex (index);
 	}
 }
