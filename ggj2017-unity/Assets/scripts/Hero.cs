@@ -87,9 +87,14 @@ public class Hero : MonoBehaviour {
         if (collision.gameObject.tag == "dieElements" &&
             collision.gameObject.tag != "Finish")
         {
+			animator.SetTrigger ("bang");
             collision.gameObject.tag = "Finish";
             RemoveLife();
         }
+		if (collision.gameObject.tag == "dieElements") {
+			animator.SetTrigger ("bang");
+			RemoveLife();
+		}
 	}
 
     public void AddLife()

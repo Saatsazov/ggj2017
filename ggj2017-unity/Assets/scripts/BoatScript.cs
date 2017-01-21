@@ -5,9 +5,11 @@ using UnityEngine;
 public class BoatScript : MonoBehaviour {
 
 	public Hero hero;
+
+	Animator animator;
 	// Use this for initialization
 	void Start () {
-		
+		animator = GetComponent<Animator> ();
 	}
 
 	// Update is called once per frame
@@ -32,7 +34,8 @@ public class BoatScript : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D collider)
 	{
 		if (collider.gameObject.tag == "dieElements") {
-			// hero.gameOver ();
+			animator.SetTrigger ("bang");
+			hero.RemoveLife ();
 		}
 	}
 
