@@ -97,14 +97,12 @@ public class Hero : MonoBehaviour {
 		animator.SetBool ("isBend", true);
 		bentingDown = true;
 		upperCollider.enabled = false;
-		print ("bentDown");
 	}
 
 	void bentUp()
 	{
 
 		animator.SetBool ("isBend", false);
-		print ("bentUp");
 		upperCollider.enabled = true;
 
 	}

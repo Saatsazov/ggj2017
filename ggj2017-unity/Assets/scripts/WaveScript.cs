@@ -10,11 +10,14 @@ public class WaveScript : MonoBehaviour {
 	public float xSpeed = 0.4f;
 	public float waveCameraOffset = 2;
 
+	GameObject emptyWave;
+
 	public GameObject wall;
 
     void Start () {
         handTemplate = GameObject.Find ("hand");
 		GenerateHands ();
+		addEmptyWave ();
 	}
 	
 	// Update is called once per frame
@@ -40,9 +43,27 @@ public class WaveScript : MonoBehaviour {
 				pos.x += 20;
 			}
 			hand.transform.position = pos;
+
+			if (emptyWave != null) {
+//				print (1);
+				var w = 2.0f;
+				if ((pos.x < emptyWave.transform.position.x + w) &&
+				    (pos.x > emptyWave.transform.position.x - w)) {
+					hand.SetActive (false);
+				} else {
+					hand.SetActive (true);
+				}
+					
+			}
 		}
 
     }
+
+	public void addEmptyWave()
+	{
+		emptyWave = GameObject.Find ("EmptyWave");
+
+	}
 
 	void GenerateHands()
 	{
