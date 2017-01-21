@@ -74,7 +74,7 @@ public class FlyingObjectsManager : MonoBehaviour {
     {
         var randomStartXPosition = randomizer.Next(400, 600) / 100.0f;
         var randomTargetXPosition = (randomizer.Next(0, 400) - 200) / 100.0f;
-        var randomTargetYPosition = randomizer.Next(400, 900) / 100.0f;
+        var randomTargetYPosition = randomizer.Next(700, 1000) / 100.0f;
         var randomObject = (FlyingObjectsTypes)(randomizer.Next() % FlyingObjectsTypes.Length);
         GameObject flyingObject = Instantiate(
             flyingObjectsTemplates[randomObject],
