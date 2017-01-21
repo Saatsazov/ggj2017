@@ -14,11 +14,13 @@ public class KnifeScript : MonoBehaviour {
 	WaveGenerator waveGenerator;
 
 	SpriteRenderer sprite;
+	GameObject mainCamera;
 
 	float speed;
 	// Use this for initialization
 	void Start () {
-		waveGenerator = GameObject.Find ("Main Camera").GetComponent<WaveGenerator> ();
+		mainCamera = GameObject.Find ("Main Camera");
+		waveGenerator = mainCamera.GetComponent<WaveGenerator> ();
 
 		startTime = Time.timeSinceLevelLoad;
 		sprite = GetComponent<SpriteRenderer> ();
@@ -30,7 +32,7 @@ public class KnifeScript : MonoBehaviour {
 	void FixedUpdate () {
 		var pos = transform.position;
 		pos.x -= speed;
-		pos.y = waveGenerator.getWorldHightByX (pos.x) + offsetX;
+		pos.y = mainCamera.transform.position.y + offsetX;
 		transform.position = pos;
 	}
 
