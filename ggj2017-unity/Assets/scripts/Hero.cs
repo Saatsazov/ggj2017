@@ -92,6 +92,10 @@ public class Hero : MonoBehaviour {
             collision.gameObject.tag = "Finish";
             RemoveLife();
         }
+		if (collision.gameObject.tag == "dieElements") {
+			animator.SetTrigger ("bang");
+			RemoveLife();
+		}
 	}
 
     public void AddLife()
