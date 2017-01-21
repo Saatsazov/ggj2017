@@ -22,6 +22,9 @@ public class Hero : MonoBehaviour {
 	public float jumpVelocity;
 	public float jumpWithBoatVelocity;
 
+	AudioSource jumpAudio;
+	AudioSource jumpWithBoatAudio;
+
 
 	Animator animator;
 
@@ -29,6 +32,8 @@ public class Hero : MonoBehaviour {
 	void Start () {
 
 		animator = GetComponent<Animator> ();
+		jumpAudio = GameObject.Find ("jump1").GetComponent<AudioSource> ();
+		jumpWithBoatAudio = GameObject.Find ("jumpWithBoat2").GetComponent<AudioSource> ();
 	}
 	
 	// Update is called once per frame
@@ -115,6 +120,7 @@ public class Hero : MonoBehaviour {
 		Vector2 force = new Vector2(0, jumpVelocity);
 		rigitBody.AddForce (force);
 
+		jumpAudio.Play ();
 
 	}
 
@@ -128,6 +134,8 @@ public class Hero : MonoBehaviour {
 		Vector2 force = new Vector2 (0, jumpWithBoatVelocity);
 		rigitBody.velocity = force;
 		boat.velocity = force;
+
+		jumpWithBoatAudio.Play ();
 		
 	}
 
