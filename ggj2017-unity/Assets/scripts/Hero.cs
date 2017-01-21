@@ -109,6 +109,18 @@ public class Hero : MonoBehaviour {
         }
 	}
 
+	public void showDeath()
+	{
+		deathHorn.SetActive (true);
+
+		deathHorn.GetComponent<Rigidbody2D> ().angularVelocity = 800.0f;
+		deathHorn.GetComponent<Rigidbody2D> ().velocity = new Vector2(-2, 2);
+
+		GetComponent<Rigidbody2D> ().velocity = new Vector2(0, 10);
+
+		animator.SetTrigger ("die");
+	}
+
     public void AddLife()
     {
         if (lives < maxLives)
