@@ -98,8 +98,10 @@ public class Hero : MonoBehaviour {
 		if (!isGrounded || !isBoatGrounded) {
 			return;
 		}
-		Vector2 velocity = new Vector2 (0, jumpVelocity);
-		rigitBody.velocity = velocity;
+//		Vector2 velocity = new Vector2 (0, jumpVelocity);
+//		rigitBody.velocity = velocity;
+		Vector2 force = new Vector2(0, jumpVelocity);
+		rigitBody.AddForce (force);
 
 	}
 
