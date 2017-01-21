@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Hero : MonoBehaviour {
 
@@ -22,18 +23,30 @@ public class Hero : MonoBehaviour {
 	public float jumpVelocity;
 	public float jumpWithBoatVelocity;
 
+    public int lives = 3;
+    private List<GameObject> hearts = new List<GameObject>();
+
 	AudioSource jumpAudio;
 	AudioSource jumpWithBoatAudio;
 
 
 	Animator animator;
+    GameObject heartTemplate;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 
 		animator = GetComponent<Animator> ();
 		jumpAudio = GameObject.Find ("jump1").GetComponent<AudioSource> ();
 		jumpWithBoatAudio = GameObject.Find ("jumpWithBoat2").GetComponent<AudioSource> ();
+
+        heartTemplate = GameObject.Find("Heart");
+        for (var i = 0; i < lives; ++i)
+        {
+            var heart = Instantiate(heartTemplate);
+            heart.transform.position = new Vector3(5.0f - 0.7f * (lives - i), 4.0f);
+            hearts.Add(heart);
+        }
 	}
 	
 	// Update is called once per frame
@@ -74,13 +87,25 @@ public class Hero : MonoBehaviour {
 		if (collision.gameObject.name == "boat") {
 			isGrounded = true;
 		}
-
+        if ((collision.gameObject.name == "FlyingCup(Clone)" ||
+            collision.gameObject.name == "FlyingBra(Clone)") &&
+            collision.gameObject.tag != "Finish")
+        {
+            collision.gameObject.tag = "Finish";
+            lives--;
+            Destroy(hearts[lives]);
+            hearts.RemoveAt(lives);
+            if (lives <= 0)
+            {
+                gameOver();
+            } 
+        }
 	}
 
 	void OnTriggerEnter2D(Collider2D collider)
 	{
 		if (collider.gameObject.tag == "dieElements") {
-			gameOver ();
+			// gameOver ();
 		}
 	}
 
@@ -140,5 +165,6 @@ public class Hero : MonoBehaviour {
 	public void gameOver()
 	{
 		print ("gameOver");
+        SceneManager.LoadScene("menu");
 	}
 }

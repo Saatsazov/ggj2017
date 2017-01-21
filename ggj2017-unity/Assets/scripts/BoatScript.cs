@@ -32,7 +32,7 @@ public class BoatScript : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D collider)
 	{
 		if (collider.gameObject.tag == "dieElements") {
-			hero.gameOver ();
+			// hero.gameOver ();
 		}
 	}
 
