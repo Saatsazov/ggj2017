@@ -34,9 +34,14 @@ public class BoatScript : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D collider)
 	{
 		if (collider.gameObject.tag == "dieElements") {
-			animator.SetTrigger ("bang");
-			hero.RemoveLife ();
+			
 			collider.gameObject.tag = "Finish";
+
+			if (hero.RemoveLife ()) {
+				animator.SetTrigger ("die");
+			} else {
+				animator.SetTrigger ("bang");
+			}
 		}
 	}
 

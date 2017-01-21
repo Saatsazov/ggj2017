@@ -34,6 +34,8 @@ public class Hero : MonoBehaviour {
 	Animator animator;
     GameObject heartTemplate;
 
+	public GameObject deathHorn;
+
     // Use this for initialization
     void Start () {
 
@@ -84,17 +86,20 @@ public class Hero : MonoBehaviour {
 		if (collision.gameObject.name == "boat") {
 			isGrounded = true;
 		}
-        if (collision.gameObject.tag == "dieElements" &&
-            collision.gameObject.tag != "Finish")
+        if (collision.gameObject.tag == "dieElements")
         {
-			animator.SetTrigger ("bang");
-            collision.gameObject.tag = "Finish";
-            RemoveLife();
+			collision.gameObject.tag = "Finish";
+			if (RemoveLife ()) {
+				deathHorn.SetActive (true);
+
+				deathHorn.GetComponent<Rigidbody2D> ().angularVelocity = 800.0f;
+				deathHorn.GetComponent<Rigidbody2D> ().velocity = new Vector2(-2, 2);
+
+				animator.SetTrigger ("die");
+			} else {
+				animator.SetTrigger ("bang");
+			}
         }
-		if (collision.gameObject.tag == "dieElements") {
-			animator.SetTrigger ("bang");
-			RemoveLife();
-		}
 	}
 
     public void AddLife()
@@ -108,15 +113,17 @@ public class Hero : MonoBehaviour {
         }
     }
 
-    public void RemoveLife()
+    public bool RemoveLife()
     {
-        lives--;
+		lives--;
         Destroy(hearts[lives]);
         hearts.RemoveAt(lives);
         if (lives <= 0)
         {
-            gameOver();
+			Invoke("gameOver", 2.0f);
+			return true;
         }
+		return false;
     }
 
 	void OnTriggerEnter2D(Collider2D collider)
