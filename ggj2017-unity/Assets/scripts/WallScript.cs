@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WallScript : MonoBehaviour {
-    private const int numberOfLevels = 27;
+    public const int numberOfLevels = 27;
     private const int heroLevelIndex = 13;
-    private Queue<float> levelsList = new Queue<float>();
+    public Queue<float> levelsList = new Queue<float>();
 
     private float kAmplitude = 1;
     private float kAmplitudePrev = 1;
@@ -70,7 +70,7 @@ public class WallScript : MonoBehaviour {
         levelsList.Dequeue();
     }
 
-    private float GetLevelByIndex(int index)
+    public float GetLevelByIndex(int index)
     {
         var enumerator = levelsList.GetEnumerator();
         var i = 0;
