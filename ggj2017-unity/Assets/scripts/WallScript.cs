@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WallScript : MonoBehaviour {
-    public const int numberOfLevels = 27;
-    private const int heroLevelIndex = 13;
+    public const int numberOfLevels = 54;
+    private const int heroLevelIndex = 25;
     public Queue<float> levelsList = new Queue<float>();
 
-    private float kAmplitude = 1;
+    private float kAmplitude = 1; // amplitude!
+    private float kFrequency = 1.2f; // velocity!
     private float kAmplitudePrev = 1;
+    private float kFrequencyPrev = 1.2f;
     private float previousAngle = 0f;
-    private float epsilan = Mathf.PI / 36;
-    private float amplitudeStep = 0.01f;
+    private float epsilan = 0.001f;
+    private float amplitudeStep = 0.1f;
+    private float currentLevel = 0;
+    private float angleStep = Mathf.PI/18;
 
     Rigidbody2D body;
 
@@ -36,24 +40,33 @@ public class WallScript : MonoBehaviour {
     { 
         var random = new System.Random();
 
-        if (Mathf.Abs(previousAngle - Mathf.PI) < epsilan)
+        if (Mathf.Abs(currentLevel) < epsilan)
         {
             kAmplitudePrev = kAmplitude;
             kAmplitude = (float)random.NextDouble() + 0.3f;
+            // kFrequencyPrev = kFrequency;
+            // kFrequency = (float)random.NextDouble() + 0.7f;
+            angleStep = Mathf.PI / random.Next(10, 20);
         }
 
         var kAmplitudeLocal = Mathf.Abs(kAmplitude - kAmplitudePrev) < epsilan ?
             kAmplitude : kAmplitudePrev + ((kAmplitude > kAmplitudePrev) ? amplitudeStep : -amplitudeStep);
         kAmplitudePrev = kAmplitudeLocal;
 
-        previousAngle += Mathf.PI / 36; // + 5deg
+        var kFrequencyLocal = Mathf.Abs(kFrequency - kFrequencyPrev) < epsilan ?
+            kFrequency : kFrequencyPrev + ((kFrequency > kFrequencyPrev) ? amplitudeStep : -amplitudeStep);
+        kFrequencyPrev = kFrequencyLocal;
 
-        if (Mathf.Abs(previousAngle - 2 * Mathf.PI) < epsilan)
+        previousAngle += angleStep; //Mathf.PI / 18; // real frequency!
+
+        if (Mathf.Abs(previousAngle - 2 * Mathf.PI / kFrequency) < epsilan)
         {
             previousAngle = 0;
         }
 
-        return kAmplitudeLocal * Mathf.Sin(previousAngle);
+        currentLevel = kAmplitudeLocal * Mathf.Sin(previousAngle * kFrequencyLocal);
+
+        return currentLevel;
     }
 
     private void GenerateLevelsList()

@@ -25,7 +25,7 @@ public class WaveScript : MonoBehaviour {
         while (enumerator.MoveNext())
         {
             var hand = enumerator.Current;
-            hand.transform.position = new Vector3(hand.transform.position.x - 1, hand.transform.position.y);
+            hand.transform.position = new Vector3(hand.transform.position.x - 0.7f, hand.transform.position.y);
         }
     }
 
@@ -42,9 +42,9 @@ public class WaveScript : MonoBehaviour {
     private GameObject CreateHand(float height, float index)
     {
         var hand = Instantiate(handTemplate);
-        hand.transform.position = new Vector3(-10 + index, -5 + height);
+        hand.transform.position = new Vector3(-10 + index * 0.7f, -5 + height);
         var scale = 0.1f;
-        hand.transform.localScale = new Vector3(scale, scale, scale);
+        hand.transform.localScale = new Vector3(scale * 0.7f, scale, scale);
         return hand;
     }
 }
