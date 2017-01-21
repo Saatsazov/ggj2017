@@ -36,6 +36,7 @@ public class BoatScript : MonoBehaviour {
 		if (collider.gameObject.tag == "dieElements") {
 			animator.SetTrigger ("bang");
 			hero.RemoveLife ();
+			collider.gameObject.tag = "Finish";
 		}
 	}
 
