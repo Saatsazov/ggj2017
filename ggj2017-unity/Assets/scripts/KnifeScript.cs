@@ -10,6 +10,8 @@ public class KnifeScript : MonoBehaviour {
 	public float minLiveTime = 3;
 	float startTime;
 
+	public WaveGenerator waveGenerator;
+
 	SpriteRenderer sprite;
 
 	float speed;
@@ -24,6 +26,7 @@ public class KnifeScript : MonoBehaviour {
 	void FixedUpdate () {
 		var pos = transform.position;
 		pos.x -= speed;
+		pos.y = waveGenerator.getWorldHightByX (pos.x);
 		transform.position = pos;
 	}
 
