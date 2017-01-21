@@ -59,7 +59,6 @@ public class FlyingObjectsManager : MonoBehaviour {
         }
         body = GetComponent<Rigidbody2D>();
         body.angularVelocity = 120.0f;
-		addKnife ();
     }
 
     void Update()
