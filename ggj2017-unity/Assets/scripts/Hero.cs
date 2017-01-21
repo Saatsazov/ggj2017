@@ -88,6 +88,7 @@ public class Hero : MonoBehaviour {
             collision.gameObject.name == "FlyingBra(Clone)") &&
             collision.gameObject.tag != "Finish")
         {
+			animator.SetTrigger ("bang");
             collision.gameObject.tag = "Finish";
             RemoveLife();
         }
