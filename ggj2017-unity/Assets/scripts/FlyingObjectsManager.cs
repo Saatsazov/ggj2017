@@ -18,7 +18,7 @@ public sealed class FlyingObjectsTypes
 
     public static readonly FlyingObjectsTypes CUP = new FlyingObjectsTypes(0, "FlyingCup", -1, 2, false, "cupfly");
 	public static readonly FlyingObjectsTypes BRA = new FlyingObjectsTypes(1, "FlyingBra", -1, 3, false, "chainbrafly");
-	public static readonly FlyingObjectsTypes DRAGON = new FlyingObjectsTypes(2, "Dragon", -1, 5, true, "droginfly");
+	public static readonly FlyingObjectsTypes DRAGON = new FlyingObjectsTypes(2, "Dragon", -1, 3, true, "droginfly");
     public static readonly FlyingObjectsTypes KNIFE = new FlyingObjectsTypes(3, "Knife", -1, 5, true, "cupfly");
 
     private FlyingObjectsTypes(int value, String name,
@@ -58,7 +58,7 @@ public class FlyingObjectsManager : MonoBehaviour {
     Dictionary<FlyingObjectsTypes, AudioSource> flyingObjectsAudio;
     System.Random randomizer = new System.Random();
     private float nextFlyDelay = 5.0f;
-    private float delaySpeed = 2.0f;
+    private float delaySpeed = 1.1f;
     private float delaySpeedStep = 0.01f;
 
     private FlyingObjectsTypes nextRandomObject;
@@ -93,9 +93,9 @@ public class FlyingObjectsManager : MonoBehaviour {
 
     private void CreateRandomFlyingObject()
     {
-        var randomStartXPosition = randomizer.Next(400, 600) / 100.0f;
+        var randomStartXPosition = randomizer.Next(600, 800) / 100.0f;
         var randomTargetXPosition = (randomizer.Next(0, 400) - 200) / 100.0f;
-        var randomTargetYPosition = randomizer.Next(700, 1000) / 100.0f;
+        var randomTargetYPosition = randomizer.Next(800, 1100) / 100.0f;
 
         GameObject flyingObject = Instantiate(flyingObjectsTemplates[nextRandomObject]);
 

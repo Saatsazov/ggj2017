@@ -174,19 +174,15 @@ public class Hero : MonoBehaviour {
 	public bool RemoveLife()
     {
 		lives--;
-		if (hearts.Count > lives) {
-			Destroy(hearts[lives]);
-			hearts.RemoveAt(lives);
-		}
         if (lives <= 0)
         {
             Invoke("gameOver", 2.0f);
             return true;
         }
-        else
-        {
-        }
-
+        if (hearts.Count > lives) {
+			Destroy(hearts[lives]);
+			hearts.RemoveAt(lives);
+		}
 
 		return false;
     }
