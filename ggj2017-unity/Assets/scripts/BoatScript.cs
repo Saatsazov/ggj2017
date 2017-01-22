@@ -31,6 +31,9 @@ public class BoatScript : MonoBehaviour {
 			hero.isBoatGrounded = false;
 		}
 
+		if (collision.gameObject.tag == "dieElements") {	
+			collision.gameObject.SetActive (false);
+		}
 		hero.playSound (collision.gameObject.name);
 	}
 

@@ -37,13 +37,16 @@ public class KnifeScript : MonoBehaviour {
 
 		knifePatterns = Resources.LoadAll<Sprite> ("badHands");
 
-		var index = Random.Range (0, knifePatterns.Length);
-		GetComponent<SpriteRenderer>().sprite = knifePatterns [index];
-		if (index == 0) {
-			tag = "duck";
-			name += "Duck";
-		} else {
-			tag = "dieElements";
+		if (!isTemplate) {
+				
+			var index = Random.Range (0, knifePatterns.Length);
+			GetComponent<SpriteRenderer> ().sprite = knifePatterns [index];
+			if (index == 0) {
+				tag = "duck";
+				name += "Duck";
+			} else {
+				tag = "dieElements";
+			}
 		}
 	}
 
