@@ -145,7 +145,7 @@ public class Hero : MonoBehaviour {
         }
         else
         {
-            if (hitMap[who] != null)
+            if (hitMap.ContainsKey(who))
             {
                 hitMap[who].Play();
             }
