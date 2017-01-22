@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenuScriptCamera : MonoBehaviour {
 
@@ -9,8 +10,13 @@ public class MainMenuScriptCamera : MonoBehaviour {
 
 	AudioSource audio;
 
+	public static bool isAlreadyShown;
+
 	// Use this for initialization
 	void Start () {
+		if (isAlreadyShown) {
+			hideSplash ();
+		}
 		Invoke ("hideSplash", 4.0f);
 		audio = GameObject.Find ("mainMenu").GetComponent<AudioSource> ();
 	}
@@ -24,6 +30,19 @@ public class MainMenuScriptCamera : MonoBehaviour {
 	{
 		canvas.SetActive (true);
 		splash.SetActive (false);
-		audio.Play ();
+		if (!isAlreadyShown) {
+			audio.Play ();
+		}
+	}
+
+	public void onClickStart()
+	{
+		if (isAlreadyShown) {
+			SceneManager.LoadScene ("game");
+		} else {
+			SceneManager.LoadScene ("intro");
+		}
+
+		isAlreadyShown = true;
 	}
 }
