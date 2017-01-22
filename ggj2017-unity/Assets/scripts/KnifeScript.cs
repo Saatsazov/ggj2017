@@ -38,10 +38,10 @@ public class KnifeScript : MonoBehaviour {
 		knifePatterns = Resources.LoadAll<Sprite> ("badHands");
 
 		var index = Random.Range (0, knifePatterns.Length);
-		index = 0;
 		GetComponent<SpriteRenderer>().sprite = knifePatterns [index];
 		if (index == 0) {
 			tag = "duck";
+			name += "Duck";
 		} else {
 			tag = "dieElements";
 		}

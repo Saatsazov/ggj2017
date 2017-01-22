@@ -73,7 +73,8 @@ public class FlyingObjectsManager : MonoBehaviour {
 
         foreach (FlyingObjectsTypes type in FlyingObjectsTypes.Values)
         {
-            flyingObjectsTemplates.Add(type, GameObject.Find(type.ToString()));
+			var o = GameObject.Find(type.ToString());
+            flyingObjectsTemplates.Add(type, o);
             flyingObjectsAudio.Add(type, GameObject.Find(type.objectSoundName).GetComponent<AudioSource>());
         }
 

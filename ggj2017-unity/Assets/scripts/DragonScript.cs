@@ -36,7 +36,10 @@ public class DragonScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(isTemplate)
-		{return;}
+		{
+			transform.position = new Vector3 (100, 100, 2.4f);
+			return;
+		}
 
 		var pos = transform.position;
 		pos.x -= speed;

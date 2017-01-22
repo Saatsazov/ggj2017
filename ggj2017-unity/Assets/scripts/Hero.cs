@@ -26,10 +26,12 @@ public class Hero : MonoBehaviour {
     public int maxLives = 3;
     private int lives = 0;
     private List<GameObject> hearts = new List<GameObject>();
-    private Dictionary<string, AudioSource> hitMap= new Dictionary<string, AudioSource>();
+    private Dictionary<string, AudioSource> sounds= new Dictionary<string, AudioSource>();
 
     AudioSource jumpAudio;
 	AudioSource jumpWithBoatAudio;
+
+	public GameObject gameOverScene;
 
 
 	Animator animator;
@@ -48,10 +50,15 @@ public class Hero : MonoBehaviour {
         int i = 0;
         while (i++ < maxLives) AddLife();
 
-        hitMap.Add("Dragon", GameObject.Find("dragonhit").GetComponent<AudioSource>());
-        hitMap.Add("FlyingCup", GameObject.Find("cuphit").GetComponent<AudioSource>());
-        hitMap.Add("FlyingBra", GameObject.Find("brahit").GetComponent<AudioSource>());
-        hitMap.Add("Last", GameObject.Find("lasthit").GetComponent<AudioSource>());
+        sounds.Add("dragonHit", GameObject.Find("dragonhit").GetComponent<AudioSource>());
+        sounds.Add("cupHit", GameObject.Find("cuphit").GetComponent<AudioSource>());
+        sounds.Add("braHit", GameObject.Find("brahit").GetComponent<AudioSource>());
+		sounds.Add("lastHit", GameObject.Find("lasthit").GetComponent<AudioSource>());
+		sounds.Add("duckPickUp", GameObject.Find("duckPickUp").GetComponent<AudioSource>());
+		sounds.Add("shipHit", GameObject.Find("shipHit").GetComponent<AudioSource>());
+		sounds.Add("shipCrash", GameObject.Find("shipCrash").GetComponent<AudioSource>());
+		sounds.Add("gameOver", GameObject.Find("gameOver").GetComponent<AudioSource>());
+		sounds.Add("mainMusic", GameObject.Find("mainMusic").GetComponent<AudioSource>());
     }
 	
 	// Update is called once per frame
@@ -90,19 +97,21 @@ public class Hero : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D collision)
 	{
 		if (collision.gameObject.name == "boat") {
-			isGrounded = true;
+			isGrounded = true;	
 		}
 
         if (collision.gameObject.tag == "dieElements")
         {
 			collision.gameObject.tag = "Finish";
 			collision.gameObject.SetActive (false);
-			if (RemoveLife (collision.gameObject.name)) {
+			playSound (collision.gameObject.name);
+			if (RemoveLife ()) {
 				deathHorn.SetActive (true);
 
 				deathHorn.GetComponent<Rigidbody2D> ().angularVelocity = 800.0f;
 				deathHorn.GetComponent<Rigidbody2D> ().velocity = new Vector2(-2, 2);
 
+				playSound ("lastHit");
 				animator.SetTrigger ("die");
 			} else {
 				animator.SetTrigger ("bang");
@@ -112,6 +121,30 @@ public class Hero : MonoBehaviour {
 		if (collision.gameObject.tag == "duck") {
 			AddLife ();
 			print ("add liefe");
+		}
+	}
+
+	public void playSound (string objName)
+	{
+
+		if (objName.Contains ("Bra")) {
+			sounds ["braHit"].Play ();
+		}
+
+		if (objName.Contains ("Cup")) {
+			sounds ["cupHit"].Play ();
+		}
+
+		if (objName.Contains ("Dragon")) {
+			sounds ["dragonHit"].Play ();
+		}
+
+		if (objName.Contains ("Duck")) {
+			sounds ["duckPickUp"].Play ();
+		}
+
+		if (sounds.ContainsKey (objName)) {
+			sounds [objName].Play ();
 		}
 	}
 
@@ -138,24 +171,21 @@ public class Hero : MonoBehaviour {
         }
     }
 
-    public bool RemoveLife(string who)
+	public bool RemoveLife()
     {
 		lives--;
         Destroy(hearts[lives]);
         hearts.RemoveAt(lives);
         if (lives <= 0)
         {
-            hitMap["Last"].Play();
             Invoke("gameOver", 2.0f);
             return true;
         }
         else
         {
-            if (hitMap.ContainsKey(who))
-            {
-                hitMap[who].Play();
-            }
         }
+
+
 		return false;
     }
 
@@ -222,6 +252,14 @@ public class Hero : MonoBehaviour {
 	public void gameOver()
 	{
 		print ("gameOver");
-        SceneManager.LoadScene("menu");
+		playSound("gameOver");
+		sounds ["mainMusic"].Stop ();
+		gameOverScene.SetActive (true);
+		Invoke ("goToMain", 2.0f);
+	}
+
+	public void goToMain()
+	{
+		SceneManager.LoadScene("menu");
 	}
 }

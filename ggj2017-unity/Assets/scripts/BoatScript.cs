@@ -30,16 +30,21 @@ public class BoatScript : MonoBehaviour {
 		if (collision.gameObject.name == "wall") {
 			hero.isBoatGrounded = false;
 		}
+
+		hero.playSound (collision.gameObject.name);
 	}
 
 	void OnTriggerEnter2D(Collider2D collider)
 	{
+		hero.playSound (collider.gameObject.name);
 		if (collider.gameObject.tag == "dieElements") {			
 			collider.gameObject.tag = "Finish";
 
-			if (hero.RemoveLife (collider.gameObject.name)) {
+			if (hero.RemoveLife ()) {
+				hero.playSound ("shipCrash");
 				dieAnim ();
 			} else {
+				hero.playSound ("shipHit");
 				animator.SetTrigger ("bang");
 			}
 		}
@@ -49,6 +54,8 @@ public class BoatScript : MonoBehaviour {
 		}
 
 		collider.gameObject.SetActive (false);
+
+
 	}
 
 	void dieAnim()
