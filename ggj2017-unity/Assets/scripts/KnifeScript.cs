@@ -16,9 +16,17 @@ public class KnifeScript : MonoBehaviour {
 	SpriteRenderer sprite;
 	GameObject mainCamera;
 
+	static bool isTemplateCreated;
+	bool isTemplate;
+
+	Sprite []knifePatterns;
+
 	float speed;
 	// Use this for initialization
 	void Start () {
+		isTemplate = !isTemplateCreated;
+		isTemplateCreated = true;
+
 		mainCamera = GameObject.Find ("Main Camera");
 		waveGenerator = mainCamera.GetComponent<WaveGenerator> ();
 
@@ -26,13 +34,31 @@ public class KnifeScript : MonoBehaviour {
 		sprite = GetComponent<SpriteRenderer> ();
 		speed = Random.Range (speedMin, speedMax);
         transform.position = new Vector3(9, -2.0f);
+
+		knifePatterns = Resources.LoadAll<Sprite> ("badHands");
+
+		var index = Random.Range (0, knifePatterns.Length);
+		index = 0;
+		GetComponent<SpriteRenderer>().sprite = knifePatterns [index];
+		if (index == 0) {
+			tag = "duck";
+		} else {
+			tag = "dieElements";
+		}
 	}
 
 	void Update()
 	{
+		if(isTemplate)
+		{
+			transform.position = new Vector3 (100, 100, 2.4f);
+			return;
+		}
+
         var pos = transform.position;
         pos.x -= speed;
         pos.y = mainCamera.transform.position.y + offsetX;
+		pos.z = 2.4f;
         transform.position = pos;
         if (!sprite.isVisible && Time.timeSinceLevelLoad - startTime > minLiveTime) {
 			//Destroy (gameObject);

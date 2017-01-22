@@ -96,6 +96,7 @@ public class Hero : MonoBehaviour {
         if (collision.gameObject.tag == "dieElements")
         {
 			collision.gameObject.tag = "Finish";
+			collision.gameObject.SetActive (false);
 			if (RemoveLife (collision.gameObject.name)) {
 				deathHorn.SetActive (true);
 
@@ -107,6 +108,11 @@ public class Hero : MonoBehaviour {
 				animator.SetTrigger ("bang");
 			}
         }
+
+		if (collision.gameObject.tag == "duck") {
+			AddLife ();
+			print ("add liefe");
+		}
 	}
 
 	public void showDeath()
