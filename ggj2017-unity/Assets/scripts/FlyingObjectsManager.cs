@@ -19,7 +19,7 @@ public sealed class FlyingObjectsTypes
     public static readonly FlyingObjectsTypes CUP = new FlyingObjectsTypes(0, "FlyingCup", -1, 2, false, "cupfly");
 	public static readonly FlyingObjectsTypes BRA = new FlyingObjectsTypes(1, "FlyingBra", -1, 3, false, "chainbrafly");
 	public static readonly FlyingObjectsTypes DRAGON = new FlyingObjectsTypes(2, "Dragon", -1, 3, true, "droginfly");
-    public static readonly FlyingObjectsTypes KNIFE = new FlyingObjectsTypes(3, "Knife", -1, 5, true, "cupfly");
+    public static readonly FlyingObjectsTypes KNIFE = new FlyingObjectsTypes(3, "Knife", -1, 3, true, "cupfly");
 
     private FlyingObjectsTypes(int value, String name,
         int lifeDelta, float frequency, bool hasOwnVelocity,
