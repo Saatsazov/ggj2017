@@ -43,6 +43,10 @@ public class BoatScript : MonoBehaviour {
 				animator.SetTrigger ("bang");
 			}
 		}
+		if (collider.gameObject.tag == "duck") {
+		
+			hero.AddLife ();
+		}
 	}
 
 	void dieAnim()

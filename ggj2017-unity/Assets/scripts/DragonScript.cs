@@ -15,8 +15,15 @@ public class DragonScript : MonoBehaviour {
 	GameObject mainCamera;
 	float offset;
 
+
+	static bool isTemplateCreated;
+	bool isTemplate;
+
 	// Use this for initialization
 	void Start () {
+
+		isTemplate = !isTemplateCreated;
+		isTemplateCreated = true;
 
 		startTime = Time.timeSinceLevelLoad;
 		mainCamera = GameObject.Find ("Main Camera");
@@ -28,6 +35,9 @@ public class DragonScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(isTemplate)
+		{return;}
+
 		var pos = transform.position;
 		pos.x -= speed;
 		pos.y = mainCamera.transform.position.y + offset;

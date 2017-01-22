@@ -56,7 +56,6 @@ public class FlyingObjectsManager : MonoBehaviour {
 
     Dictionary<FlyingObjectsTypes, GameObject> flyingObjectsTemplates;
     Dictionary<FlyingObjectsTypes, AudioSource> flyingObjectsAudio;
-    Rigidbody2D body;
     System.Random randomizer = new System.Random();
     private float nextFlyDelay = 5.0f;
     private float delaySpeed = 2.0f;
@@ -77,8 +76,7 @@ public class FlyingObjectsManager : MonoBehaviour {
             flyingObjectsTemplates.Add(type, GameObject.Find(type.ToString()));
             flyingObjectsAudio.Add(type, GameObject.Find(type.objectSoundName).GetComponent<AudioSource>());
         }
-        body = GetComponent<Rigidbody2D>();
-        body.angularVelocity = 120.0f;
+
     }
 
     void Update()
@@ -86,7 +84,6 @@ public class FlyingObjectsManager : MonoBehaviour {
         nextFlyDelay -= Time.deltaTime;
         if (nextFlyDelay <= 0f)
         {
-            print("Update");
 			CreateRandomFlyingObject();
             nextFlyDelay = delaySpeed * nextRandomObject.frequency;
             delaySpeed  = delaySpeed > 0.8 ? delaySpeed -= delaySpeedStep : delaySpeed;
@@ -112,6 +109,10 @@ public class FlyingObjectsManager : MonoBehaviour {
 
             
         }
+		if (nextRandomObject == FlyingObjectsTypes.CUP || nextRandomObject == FlyingObjectsTypes.BRA) {
+			var body = flyingObject.GetComponent<Rigidbody2D> ();
+			body.angularVelocity = 120.0f;
+		}
 
         flyingObjectsAudio[nextRandomObject].Play();
 

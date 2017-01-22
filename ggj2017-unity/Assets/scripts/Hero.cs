@@ -107,6 +107,11 @@ public class Hero : MonoBehaviour {
 				animator.SetTrigger ("bang");
 			}
         }
+
+		if (collision.gameObject.tag == "duck") {
+			AddLife ();
+			print ("add liefe");
+		}
 	}
 
 	public void showDeath()
