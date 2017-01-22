@@ -47,6 +47,8 @@ public class BoatScript : MonoBehaviour {
 		
 			hero.AddLife ();
 		}
+
+		collider.gameObject.SetActive (false);
 	}
 
 	void dieAnim()
